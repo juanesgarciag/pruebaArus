@@ -28,4 +28,4 @@ const isValidUserId = async (id = "") => {
 
 
 
-export {isValidRole, isValidEmail};
+export {isValidRole, isValidEmail, isValidUserId};
