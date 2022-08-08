@@ -1,19 +1,19 @@
 import express from 'express';
 import cors from 'cors';
-import { dbConection } from '../database/config.db.js';
-import { routerUser } from '../routes/user.routes.js';
-import { routerRole } from '../routes/role.routes.js';
-import { routerServer } from '../routes/server.routes.js';
-import { routerAuth } from '../routes/auth.routes.js';
+import http from 'http';
 
+import { dbConection } from '../database/config.db.js';
+import { routerAuth, routerRole, routerServer, routerUser  } from '../routes/index.routes.js';
 
 class Server {
     constructor() {
         this.expressApp = express();
-        this.authPath = "/api/auth";
-        this.usersPath = "/api/users";
-        this.rolesPath = "/api/roles";
-        this.serversPath = "/api/servers";
+        this.paths = {
+            auth:       "/api/auth",
+            users:      "/api/users",
+            roles:      "/api/roles",
+            servers:    "/api/servers"
+        }
 
         this.PORT = process.env.PORT || 3000;
 
@@ -43,10 +43,10 @@ class Server {
     }
 
     routes(){
-        this.expressApp.use(this.authPath, routerAuth);
-        this.expressApp.use(this.usersPath, routerUser);
-        this.expressApp.use(this.rolesPath, routerRole);
-        this.expressApp.use(this.serversPath, routerServer);
+        this.expressApp.use(this.paths.auth, routerAuth);
+        this.expressApp.use(this.paths.users, routerUser);
+        this.expressApp.use(this.paths.roles, routerRole);
+        this.expressApp.use(this.paths.servers, routerServer);
     }
 
     listen(){
