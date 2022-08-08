@@ -4,11 +4,13 @@ import { dbConection } from '../database/config.db.js';
 import { routerUser } from '../routes/user.routes.js';
 import { routerRole } from '../routes/role.routes.js';
 import { routerServer } from '../routes/server.routes.js';
+import { routerAuth } from '../routes/auth.routes.js';
 
 
 class Server {
     constructor() {
         this.expressApp = express();
+        this.authPath = "/api/auth";
         this.usersPath = "/api/users";
         this.rolesPath = "/api/roles";
         this.serversPath = "/api/servers";
@@ -41,6 +43,7 @@ class Server {
     }
 
     routes(){
+        this.expressApp.use(this.authPath, routerAuth);
         this.expressApp.use(this.usersPath, routerUser);
         this.expressApp.use(this.rolesPath, routerRole);
         this.expressApp.use(this.serversPath, routerServer);

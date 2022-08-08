@@ -18,6 +18,21 @@ const getServers = async (req = request, res = response) => {
   res.json(servers);
 };
 
+const getServerById = async (req = request, res = response) => {
+  const { id } = req.params;
+
+  try {
+    const server = await Server.findById(id).populate({
+      path: "userAssociated",
+      select: "userName",
+    });
+
+    res.json(server);
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 const postServer = async (req = request, res = response) => {
   const { userAssociated, ...rest } = req.body;
 
@@ -45,17 +60,25 @@ const putServer = async (req = request, res = response) => {
 
   const { ...rest } = req.body;
 
-  const server = await Server.findByIdAndUpdate(id, rest);
+  try {
+    const server = await Server.findByIdAndUpdate(id, rest);
 
-  res.json(server);
+    res.json(server);
+  } catch (error) {
+    throw new Error(error);
+  }
 };
 
 const deleteServer = async (req = request, res = response) => {
   const { id } = req.params;
 
-  const server = await Server.findByIdAndDelete(id);
+  try {
+    const server = await Server.findByIdAndDelete(id);
 
-  res.json(server);
+    res.json(server);
+  } catch (error) {
+    throw new Error(error);
+  }
 };
 
-export { getServers, postServer, putServer, deleteServer };
+export { getServers, getServerById, postServer, putServer, deleteServer };
