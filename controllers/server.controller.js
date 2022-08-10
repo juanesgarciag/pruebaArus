@@ -2,6 +2,9 @@ import { response, request } from "express";
 
 import User from "../models/user.model.schema.js";
 import Server from "../models/servers.model.schema.js";
+import mongoose from "mongoose";
+
+const serv = new Server();
 
 const getServers = async (req = request, res = response) => {
   const { page = 1, limit = 5 } = req.query;
@@ -33,27 +36,54 @@ const getServerById = async (req = request, res = response) => {
   }
 };
 
-const postServer = async (req = request, res = response) => {
-  const { userAssociated, ...rest } = req.body;
-
-  const user = await User.findById(userAssociated);
-
-  const server = new Server({
-    userAssociated: user._id,
-    ...rest,
-  });
+const getServersByUserId = async ( req = request, res = response ) => {
+  const { id } = req.params;
 
   try {
-    const savedServer = await server.save();
+    
+    const serversUser = await Server.userAssociated.find(id);
 
-    user.servers = user.servers.concat(savedServer._id);
-    await user.save();
+    res.json(serversUser);
+
   } catch (error) {
     throw new Error(error);
   }
+}
+
+const postServer = async (req = request, res = response) => {
+  const { _id, ...rest } = req.body;
+
+  const server = new Server(rest);
+
+  await server.save();
+
+  // try {
+  //   const savedServer = await server.save();
+
+  //   user.servers = user.servers.concat(savedServer._id);
+  //   await user.save();
+  // } catch (error) {
+  //   throw new Error(error);
+  // }
 
   res.json(server);
 };
+
+const serverActualization = async (req = request, res = response) => {
+  const {id} = req.params;
+  const {serverActuall} = req.body;
+
+  const server = await Server.findById(id);
+  
+  if(serverActuall >= server.serverOverloadAlert){
+    server.serverCapacity += 10;
+    server.serverOverloadAlert += 10;
+    server.save(); 
+  }
+
+  res.json(server);
+
+}
 
 const putServer = async (req = request, res = response) => {
   const { id } = req.params;
@@ -81,4 +111,4 @@ const deleteServer = async (req = request, res = response) => {
   }
 };
 
-export { getServers, getServerById, postServer, putServer, deleteServer };
+export { getServers, getServerById, getServersByUserId, postServer, putServer, deleteServer, serverActualization };

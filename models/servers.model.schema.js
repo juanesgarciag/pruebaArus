@@ -10,19 +10,26 @@ const ServerSchema = mongoose.Schema({
     serverCapacity:{
         type: Number,
         require: [true, "Debe indicar la capacidad del servicio"]
+    },serverActuall: {
+        type: Number,
+        default: 0,
+    },
+    serverIp: {
+        type: String,
+        default: "0.0.0.0",
     },
     serverOverloadAlert: {
         type: Number,
         require: [true, "Debe indicar cuando alertar para aumento de servidores"]
     },
     userAssociated: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+        type: String,
+        // ref: "User"
     }
 });
 
 ServerSchema.methods.toJSON = function () {
-    const {__v, _id, ...server} = this.toObject();
+    const {__v, ...server} = this.toObject();
 
     return server;
 }

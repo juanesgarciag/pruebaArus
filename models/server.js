@@ -1,13 +1,19 @@
 import express from 'express';
 import cors from 'cors';
-import http from 'http';
+import {createServer} from 'http';
+import {Server} from 'socket.io';
 
 import { dbConection } from '../database/config.db.js';
 import { routerAuth, routerRole, routerServer, routerUser  } from '../routes/index.routes.js';
+import {socketController} from "../sockets/socket.controller.js"
 
-class Server {
+class ServerApp {
     constructor() {
         this.expressApp = express();
+        this.socketApp = createServer(this.expressApp);
+        this.io = new Server(this.socketApp, {});
+
+
         this.paths = {
             auth:       "/api/auth",
             users:      "/api/users",
@@ -25,11 +31,14 @@ class Server {
 
         //Routes
         this.routes();
-    }
+
+        // Sockets
+        this.sockets();
+    };
 
     async dbConect() {
         await dbConection();
-    }
+    };
 
     middlewares(){
         //Cors
@@ -40,22 +49,26 @@ class Server {
 
         //Public
         this.expressApp.use(express.static('public'));
-    }
+    };
 
     routes(){
         this.expressApp.use(this.paths.auth, routerAuth);
         this.expressApp.use(this.paths.users, routerUser);
         this.expressApp.use(this.paths.roles, routerRole);
         this.expressApp.use(this.paths.servers, routerServer);
-    }
+    };
+
+    sockets(){
+        this.io.on("connection", socketController);
+    };
 
     listen(){
-        this.expressApp.listen(this.PORT, () => {
-            console.log(`Conexión establecida en http://localhost:${this.PORT}`);
-        })
-    }
+        this.socketApp.listen(this.PORT, () => {
+            console.log(`Conexión establecida en ${process.env.URI}${this.PORT}`);
+        });
+    };
 
-}
+};
 
 
-export {Server};
+export {ServerApp};

@@ -12,9 +12,7 @@ const UserSchema = mongoose.Schema({
     require: [true, "Debe ingresar una contraseña"],
   },
   role: {
-    type: mongoose.Schema.Types.ObjectId,
-    require: true,
-    ref: "Roles"
+    type: String,
     // enum: ['ADMIN', 'OPERADOR', 'CONSULTOR'],
   },
   userData:
@@ -39,7 +37,7 @@ const UserSchema = mongoose.Schema({
 });
 
 UserSchema.methods.toJSON = function () {
-  const { __v, password, _id, isActive, ...user } = this.toObject();
+  const { __v, password, ...user } = this.toObject();
   // user.uid = _id;
   return user;
 };

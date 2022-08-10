@@ -8,7 +8,7 @@ const generateJWT = async (uid = '') => {
         const jwt = await jwtConstructor
             .setProtectedHeader({ alg: "HS256", typ: "JWT" })
             .setIssuedAt()
-            .setExpirationTime('2h')
+            .setExpirationTime('24h')
             .sign(encoder.encode(process.env.SIGNKEY));
 
         return(jwt);

@@ -11,12 +11,11 @@ const getUsers = async (req = request, res = response) => {
 
   const options = {
     populate: [roleData, serverData],
-    query: { isActive: true },
     page,
     limit,
   };
 
-  const users = await User.paginate({}, options);
+  const users = await User.paginate({ isActive: true }, options);
 
   res.json(users);
 };
