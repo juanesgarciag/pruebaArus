@@ -41,7 +41,7 @@ const getServersByUserId = async ( req = request, res = response ) => {
 
   try {
     
-    const serversUser = await Server.userAssociated.find(id);
+    const serversUser = await Server.find({'userAssociated': id});
 
     res.json(serversUser);
 
@@ -77,6 +77,7 @@ const serverActualization = async (req = request, res = response) => {
   
   if(serverActuall >= server.serverOverloadAlert){
     server.serverCapacity += 10;
+    server.serverActuall = serverActuall;
     server.serverOverloadAlert += 10;
     server.save(); 
   }

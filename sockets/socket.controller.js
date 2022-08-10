@@ -10,6 +10,7 @@ const socketController = (socket) => {
     socket.on('', (payload) => {
         console.log(payload);
     })
+
 }
 
 export {socketController};

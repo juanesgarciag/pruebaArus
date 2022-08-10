@@ -54,7 +54,7 @@ routerServer.post(
   postServer
 );
 
-routerServer.post("/:id", serverActualization);
+routerServer.post("/serverupdate/:id", serverActualization);
 
 routerServer.put(
   "/:id",

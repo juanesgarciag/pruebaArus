@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/4d65ccdb-df7b-4a73-95f8-42ade4bcf498/microsoft.web/sites/subscriptions/4d65ccdb-df7b-4a73-95f8-42ade4bcf498/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/pruebaArusBack",
+    "appService.deploySubpath": "."
+}
